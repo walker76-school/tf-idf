@@ -1,6 +1,3 @@
-from nltk.corpus import brown
-from nltk.corpus import state_union
-from nltk.corpus import shakespeare
 import nltk
 import os
 from nltk.corpus import PlaintextCorpusReader
@@ -368,54 +365,3 @@ class CorpusReader_TFIDF:
         new_tf_idf = self.tf_idf_new(words)
 
         return 1 - spatial.distance.cosine(new_tf_idf, self.tf_idf_res[fileid])
-
-
-def test(tfidf):
-    dim = tfidf.tf_idf_dim()
-
-    count = 0
-    for word in dim:
-        if count >= 15:
-            print()
-            break
-        print(word, end=" ")
-        count += 1
-
-    for id in tfidf.fileids():
-        tf_idf_spec = tfidf.tf_idf(id)
-        print(id, end=", ")
-        for x in range(15):
-            print(tf_idf_spec[0][x], end=" ")
-        print()
-
-    fileids = tfidf.fileids()
-    fileid_len = len(fileids)
-    for i in range(fileid_len):
-        for j in range(i, fileid_len):
-            id = fileids[i]
-            sub_id = fileids[j]
-            print(id, end=" ")
-            print(sub_id, end=" : ")
-            cos = tfidf.cosine_sim([id, sub_id])
-            print(cos)
-
-
-if __name__ == "__main__":
-
-    nltk.download("brown")
-    nltk.download("state_union")
-
-    print("Brown")
-    tfidf = CorpusReader_TFIDF(brown)
-    test(tfidf)
-
-    print("State of the Union")
-    tfidf = CorpusReader_TFIDF(state_union)
-    test(tfidf)
-
-    # normal = 7:17.78
-    # download = 7:06.19
-    # updated words = 6:13.97
-    # swapped threads = 6:11.03
-
-
