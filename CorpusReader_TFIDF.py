@@ -42,6 +42,7 @@ class CorpusReader_TFIDF:
         self.tf = {}
         self.idf = {}
         self.tf_idf_res = {}
+        self.words_dict = {}
 
     def fileids(self):
         return self.corpus.fileids()
@@ -54,9 +55,32 @@ class CorpusReader_TFIDF:
 
     def words(self, fileids=[]):
         if len(fileids) <= 0:
-            return self.process_words(self.corpus.words())
+            ret = []
+            for fileid in self.corpus.fileids():
+                if fileid in self.words_dict:
+                    ret = ret + self.words_dict.get(fileid)
+                else:
+                    processed = self.process_words(self.corpus.words(fileid))
+                    self.words_dict[fileid] = processed
+                    ret = ret + processed
+            return ret
+        elif isinstance(fileids, str):
+            if fileids in self.words_dict:
+                return self.words_dict.get(fileids)
+            else:
+                processed = self.process_words(self.corpus.words(fileids))
+                self.words_dict[fileids] = processed
+                return processed
         else:
-            return self.process_words(self.corpus.words(fileids))
+            ret = []
+            for fileid in fileids:
+                if fileid in self.words_dict:
+                    ret = ret + self.words_dict.get(fileid)
+                else:
+                    processed = self.process_words(self.corpus.words(fileid))
+                    self.words_dict[fileid] = processed
+                    ret = ret + processed
+            return ret
 
     def process_words(self, words_list):
         # Init the words
@@ -86,7 +110,7 @@ class CorpusReader_TFIDF:
         return self.corpus.abspath(fileid)
 
     def tf_raw(self):
-        #print("TF Raw")
+        print("TF Raw")
         tf = {}
 
         for fileid in self.fileids():
@@ -98,7 +122,7 @@ class CorpusReader_TFIDF:
         return tf
 
     def tf_lognormalized(self):
-        #print("TF Log Normalized")
+        print("TF Log Normalized")
         tf = {}
 
         for fileid in self.fileids():
@@ -114,7 +138,7 @@ class CorpusReader_TFIDF:
         return tf
 
     def tf_binary(self):
-        #print("TF Binary")
+        print("TF Binary")
         tf = {}
 
         for fileid in self.fileids():
@@ -126,6 +150,7 @@ class CorpusReader_TFIDF:
         return tf
 
     def tf_runner(self):
+        print("TF Runner")
 
         if len(self.tf) > 0:
             return self.tf
@@ -142,7 +167,7 @@ class CorpusReader_TFIDF:
         return self.tf
 
     def idf_base(self):
-        #print("IDF Base")
+        print("IDF Base")
         idf = Counter({})
         count = len(self.fileids())
 
@@ -166,7 +191,7 @@ class CorpusReader_TFIDF:
         return idf
 
     def idf_smooth(self):
-        #print("IDF Smooth")
+        print("IDF Smooth")
         idf = Counter({})
         count = len(self.fileids())
 
@@ -190,7 +215,7 @@ class CorpusReader_TFIDF:
         return idf
 
     def idf_probability(self):
-        #print("IDF Probability")
+        print("IDF Probability")
         idf = Counter({})
         count = len(self.fileids())
 
@@ -257,10 +282,14 @@ class CorpusReader_TFIDF:
                 idf_thread.start()
 
             if tf_thread.is_alive():
+                print("TF is alive")
                 tf_thread.join()
+                print("TF is joined")
 
             if idf_thread.is_alive():
+                print("IDF is alive")
                 idf_thread.join()
+                print("IDF is joined")
 
             self_dict = {}
             count = len(self.dim)
@@ -396,5 +425,6 @@ if __name__ == "__main__":
 
     # normal = 7:17.78
     # download = 7:06.19
+    # updated words = 6:13.97
 
 
