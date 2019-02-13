@@ -110,7 +110,6 @@ class CorpusReader_TFIDF:
         return self.corpus.abspath(fileid)
 
     def tf_raw(self):
-        print("TF Raw")
         tf = {}
 
         for fileid in self.fileids():
@@ -122,7 +121,6 @@ class CorpusReader_TFIDF:
         return tf
 
     def tf_lognormalized(self):
-        print("TF Log Normalized")
         tf = {}
 
         for fileid in self.fileids():
@@ -138,7 +136,6 @@ class CorpusReader_TFIDF:
         return tf
 
     def tf_binary(self):
-        print("TF Binary")
         tf = {}
 
         for fileid in self.fileids():
@@ -150,7 +147,6 @@ class CorpusReader_TFIDF:
         return tf
 
     def tf_runner(self):
-        print("TF Runner")
 
         if len(self.tf) > 0:
             return self.tf
@@ -167,7 +163,6 @@ class CorpusReader_TFIDF:
         return self.tf
 
     def idf_base(self):
-        print("IDF Base")
         idf = Counter({})
         count = len(self.fileids())
 
@@ -191,7 +186,6 @@ class CorpusReader_TFIDF:
         return idf
 
     def idf_smooth(self):
-        print("IDF Smooth")
         idf = Counter({})
         count = len(self.fileids())
 
@@ -215,7 +209,6 @@ class CorpusReader_TFIDF:
         return idf
 
     def idf_probability(self):
-        print("IDF Probability")
         idf = Counter({})
         count = len(self.fileids())
 
@@ -283,14 +276,10 @@ class CorpusReader_TFIDF:
                 tf_thread.start()
 
             if idf_thread.is_alive():
-                print("IDF is alive")
                 idf_thread.join()
-                print("IDF is joined")
 
             if tf_thread.is_alive():
-                print("TF is alive")
                 tf_thread.join()
-                print("TF is joined")
 
             self_dict = {}
             count = len(self.dim)
