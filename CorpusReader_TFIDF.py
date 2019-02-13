@@ -234,10 +234,11 @@ class CorpusReader_TFIDF:
         # This is where we can implement specific algorithms
         for word in idf:
             ni = idf[word]
-            try:
-                idf[word] = log((count - ni) / ni)
-            except:
+            log_var = (count - ni) / ni
+            if log_var < 1:
                 idf[word] = 0
+            else:
+                idf[word] = log(log_var)
 
         self.idf = idf
         return idf
