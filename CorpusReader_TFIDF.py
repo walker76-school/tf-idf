@@ -383,6 +383,9 @@ def test(tfidf):
 
 if __name__ == "__main__":
 
+    nltk.download("brown")
+    nltk.download("state_union")
+
     print("Brown")
     tfidf = CorpusReader_TFIDF(brown)
     test(tfidf)
@@ -390,5 +393,8 @@ if __name__ == "__main__":
     print("State of the Union")
     tfidf = CorpusReader_TFIDF(state_union)
     test(tfidf)
+
+    # normal = 7:17.78
+    # download = 7:06.19
 
 
