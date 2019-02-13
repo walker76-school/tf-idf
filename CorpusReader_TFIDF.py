@@ -92,7 +92,7 @@ class CorpusReader_TFIDF:
             words = words_list
 
         # Ignore case
-        if self.ignorecase == "yes":
+        if self.ignorecase != "no":
             words = [word.lower() for word in words]
 
         words = [word for word in words if word not in self.stop_words]
