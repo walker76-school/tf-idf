@@ -275,21 +275,21 @@ class CorpusReader_TFIDF:
             tf_thread = Thread(target=self.tf_runner, args=())
             idf_thread = Thread(target=self.idf_runner, args=())
 
-            if len(self.tf) <= 0:
-                tf_thread.start()
-
             if len(self.idf) <= 0:
                 idf_thread.start()
 
-            if tf_thread.is_alive():
-                print("TF is alive")
-                tf_thread.join()
-                print("TF is joined")
+            if len(self.tf) <= 0:
+                tf_thread.start()
 
             if idf_thread.is_alive():
                 print("IDF is alive")
                 idf_thread.join()
                 print("IDF is joined")
+
+            if tf_thread.is_alive():
+                print("TF is alive")
+                tf_thread.join()
+                print("TF is joined")
 
             self_dict = {}
             count = len(self.dim)
@@ -426,5 +426,6 @@ if __name__ == "__main__":
     # normal = 7:17.78
     # download = 7:06.19
     # updated words = 6:13.97
+    # swapped threads = 6:11.03
 
 
